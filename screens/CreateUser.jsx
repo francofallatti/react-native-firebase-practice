@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 
-const CreateUser = () => {
+const CreateUser = props => {
   const [usersData, setUsersData] = useState({
     name: '',
     email: '',
@@ -28,15 +28,16 @@ const CreateUser = () => {
     } else if (usersData.phone === '') {
       alert('please provide a phone');
     } else {
-      let name = usersData.name;
-      let email = usersData.email;
-      let phone = usersData.phone;
-      firestore().collection('users').add({
-        name,
-        email,
-        phone,
-      });
-      alert('user saved');
+      try {
+        await firestore().collection('users').add({
+          name: usersData.name,
+          email: usersData.email,
+          phone: usersData.phone,
+        });
+        props.navigation.navigate('UsersList');
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
