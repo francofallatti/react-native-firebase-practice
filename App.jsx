@@ -10,10 +10,10 @@ import UsersListFunction from './screens/UsersListFunction';
 const MainNavigation = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="CreateUser" component={CreateUser} />
-      <Stack.Screen name="UsersListFunction" component={UsersListFunction} />
-
       <Stack.Screen name="UsersList" component={UsersList} />
+      <Stack.Screen name="CreateUser" component={CreateUser} />
+      {/* <Stack.Screen name="UsersListFunction" component={UsersListFunction} /> */}
+
       <Stack.Screen name="UserDetail" component={UserDetail} />
     </Stack.Navigator>
   );

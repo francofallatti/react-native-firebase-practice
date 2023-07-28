@@ -1,48 +1,99 @@
-import React, {Component} from 'react';
-import {Button, Text, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  ScrollView,
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 
-class UsersList extends Component {
-  state = {
-    users: [],
-  };
-  constructor(props) {
-    super(props);
-    this.subscriber = firestore()
+const UsersList = props => {
+  const [usersData, setUsersData] = useState([]);
+
+  useEffect(() => {
+    const subscriber = firestore()
       .collection('users')
-      .onSnapshot(docs => {
+      .onSnapshot(querySnapshot => {
         let users = [];
-        docs.forEach(doc => {
-          users.push(doc.data());
+        querySnapshot.forEach(doc => {
+          const {name, email, phone} = doc.data();
+          users.push({
+            id: doc.id,
+            name,
+            email,
+            phone,
+          });
         });
-        this.setState({users});
-        console.log(users);
+        setUsersData(users);
+        console.log(usersData);
       });
-  }
 
-  addRandomUser = async () => {
-    let name = Math.random().toString(36).substring(7);
-    let email = Math.random().toString(36).substring(7) + '@';
-    firestore().collection('users').add({
-      name,
-      email,
-      phone: '1234',
-    });
-  };
+    return () => {
+      subscriber;
+    };
+  }, []);
 
-  render() {
-    return (
-      <View>
-        <Text>UsersList</Text>
-        <Button title={'add random user'} onPress={this.addRandomUser} />
-        {this.state.users.map((user, index) => (
-          <View key={index}>
-            <Text>{user.name}</Text>
-          </View>
-        ))}
-      </View>
-    );
-  }
-}
+  return (
+    <ScrollView>
+      <Button
+        onPress={() => props.navigation.navigate('CreateUser')}
+        title="Create User"
+      />
+      {usersData.map(user => {
+        return (
+          <TouchableOpacity // Reemplaza ListItem con TouchableOpacity
+            key={user.id}
+            style={styles.listItem}
+            onPress={() => {
+              props.navigation.navigate('UserDetail', {
+                userId: user.id,
+              });
+            }}>
+            <View style={styles.avatar}>
+              <Text>{user.name.charAt(0)}</Text>
+            </View>
+            <View style={styles.userInfo}>
+              <Text style={styles.userName}>{user.name}</Text>
+              <Text style={styles.userEmail}>{user.email}</Text>
+            </View>
+          </TouchableOpacity>
+        );
+      })}
+    </ScrollView>
+  );
+};
 
 export default UsersList;
+
+const styles = StyleSheet.create({
+  listItem: {
+    flexDirection: 'row',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#ddd',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  userInfo: {
+    flex: 1,
+  },
+  userName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  userEmail: {
+    fontSize: 14,
+    color: '#888',
+  },
+});
