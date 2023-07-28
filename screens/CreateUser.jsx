@@ -2,22 +2,44 @@ import React, {useState} from 'react';
 import {
   Text,
   View,
-  Button,
   TextInput,
-  ScrollView,
   StyleSheet,
+  Button,
+  ScrollView,
 } from 'react-native';
+import firestore, {firebase} from '@react-native-firebase/firestore';
 
 const CreateUser = () => {
-  const [state, setState] = useState({
+  const [usersData, setUsersData] = useState({
     name: '',
     email: '',
     phone: '',
   });
 
-  const handleInput = (property, value) => {
-    setState({...state, [property]: value});
+  const handleInput = (name, value) => {
+    setUsersData(prevState => ({...prevState, [name]: value}));
   };
+  const saveUser = async () => {
+    console.log(usersData);
+    if (usersData.name === '') {
+      alert('please provide a name');
+    } else if (usersData.email === '') {
+      alert('please provide a email');
+    } else if (usersData.phone === '') {
+      alert('please provide a phone');
+    } else {
+      let name = usersData.name;
+      let email = usersData.email;
+      let phone = usersData.phone;
+      firestore().collection('users').add({
+        name,
+        email,
+        phone,
+      });
+      alert('user saved');
+    }
+  };
+
   return (
     <ScrollView style={style.container}>
       <View>
@@ -38,7 +60,7 @@ const CreateUser = () => {
         />
       </View>
       <View>
-        <Button title={'Save user'} onPress={() => console.log(state)} />
+        <Button title={'Save user'} onPress={() => saveUser()} />
       </View>
     </ScrollView>
   );

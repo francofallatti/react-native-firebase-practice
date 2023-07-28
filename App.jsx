@@ -5,11 +5,14 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import UsersList from './screens/UsersList';
 import UserDetail from './screens/UserDetail';
 import CreateUser from './screens/CreateUser';
+import UsersListFunction from './screens/UsersListFunction';
 
 const MainNavigation = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="CreateUser" component={CreateUser} />
+      <Stack.Screen name="UsersListFunction" component={UsersListFunction} />
+
       <Stack.Screen name="UsersList" component={UsersList} />
       <Stack.Screen name="UserDetail" component={UserDetail} />
     </Stack.Navigator>
