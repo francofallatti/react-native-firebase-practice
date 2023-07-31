@@ -5,7 +5,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import UsersList from './screens/UsersList';
 import UserDetail from './screens/UserDetail';
 import CreateUser from './screens/CreateUser';
-import UsersListFunction from './screens/UsersListFunction';
 
 const MainNavigation = () => {
   return (
@@ -20,7 +19,6 @@ const MainNavigation = () => {
         component={CreateUser}
         options={{title: ' Create a New User'}}
       />
-      {/* <Stack.Screen name="UsersListFunction" component={UsersListFunction} /> */}
 
       <Stack.Screen
         name="UserDetail"

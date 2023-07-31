@@ -11,7 +11,7 @@ import {
 import firestore, {firebase} from '@react-native-firebase/firestore';
 
 const UserDetail = props => {
-  ////console.log(props.route.params.userId);
+  //console.log(props.route.params.userId);
 
   const [usersData, setUsersData] = useState({
     id: '',
@@ -24,11 +24,10 @@ const UserDetail = props => {
   const [loading, setLoading] = useState(true);
 
   const getUserByID = async id => {
-    //console.log('id: ' + id);
+    console.log('id: ' + id);
     try {
       const doc = await firestore().collection('users').doc(id).get();
       const user = doc.data();
-      //console.log('user detail: ' + user);
       setUsersData({...user, id: doc.id});
     } catch (error) {
       console.error('Error fetching user:', error);
@@ -37,23 +36,20 @@ const UserDetail = props => {
   };
 
   const deleteUser = async id => {
-    //console.log('user to delete: ' + usersData);
     try {
       await firestore()
         .collection('users')
         .doc(id)
         .delete()
         .then(() => {
-          alert('User deleted!');
           props.navigation.navigate('UsersList');
         });
     } catch (error) {
-      //console.log('Error deleting user:', error);
+      console.log('Error deleting user:', error);
     }
   };
 
   const updateUser = async id => {
-    //console.log('user to update: ' + usersData);
     try {
       await firestore()
         .collection('users')
@@ -64,11 +60,10 @@ const UserDetail = props => {
           phone: usersData.phone,
         })
         .then(() => {
-          alert('User updated!');
           props.navigation.navigate('UsersList');
         });
     } catch (error) {
-      //console.log('Error updating user:', error);
+      console.log('Error updating user:', error);
     }
   };
 
@@ -87,6 +82,36 @@ const UserDetail = props => {
       </View>
     );
   }
+
+  const confirmationAlert = action => {
+    if (action === 'delete') {
+      Alert.alert(
+        'Removing the User...',
+        'Are you sure?',
+        [
+          {text: 'Yes', onPress: () => deleteUser(props.route.params.userId)},
+          {text: 'No', onPress: () => console.log('canceled')},
+        ],
+        {
+          cancelable: true,
+        },
+      );
+    } else {
+      {
+        Alert.alert(
+          'Updating the User...',
+          'Are you sure?',
+          [
+            {text: 'Yes', onPress: () => updateUser(props.route.params.userId)},
+            {text: 'No', onPress: () => console.log('canceled')},
+          ],
+          {
+            cancelable: true,
+          },
+        );
+      }
+    }
+  };
 
   return (
     <ScrollView style={style.container}>
@@ -115,14 +140,14 @@ const UserDetail = props => {
       <View style={{paddingBottom: 10}}>
         <Button
           title={'Update User'}
-          onPress={() => updateUser(props.route.params.userId)}
+          onPress={() => confirmationAlert('update')}
         />
       </View>
       <View>
         <Button
           title={'Delete User'}
           color={'#E37399'}
-          onPress={() => deleteUser(props.route.params.userId)}
+          onPress={() => confirmationAlert('delete')}
         />
       </View>
     </ScrollView>
