@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, TextInput, ScrollView, Button} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  ScrollView,
+  Button,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 
 const UserDetail = props => {
@@ -28,6 +36,22 @@ const UserDetail = props => {
     setLoading(false);
   };
 
+  const deleteUser = async id => {
+    console.log(usersData);
+    try {
+      await firestore()
+        .collection('users')
+        .doc(id)
+        .delete()
+        .then(() => {
+          alert('User deleted!');
+          props.navigation.navigate('UsersList');
+        });
+    } catch (error) {
+      console.log('Error deleting user:', error);
+    }
+  };
+
   useEffect(() => {
     getUserByID(props.route.params.userId);
   }, []);
@@ -35,6 +59,14 @@ const UserDetail = props => {
   const handleInput = (name, value) => {
     setUsersData(prevState => ({...prevState, [name]: value}));
   };
+
+  if (loading) {
+    return (
+      <View>
+        <ActivityIndicator size={'large'} color={'#9E9E9E'} />
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={style.container}>
@@ -67,7 +99,7 @@ const UserDetail = props => {
         <Button
           title={'Delete User'}
           color={'#E37399'}
-          onPress={() => saveUser()}
+          onPress={() => deleteUser(props.route.params.userId)}
         />
       </View>
     </ScrollView>
