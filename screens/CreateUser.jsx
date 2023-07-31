@@ -52,11 +52,13 @@ const CreateUser = props => {
         <TextInput
           placeholder={'Email User'}
           style={style.inputGroup}
+          keyboardType={'email-address'}
           onChangeText={value => handleInput('email', value)}
         />
         <TextInput
           placeholder={'Phone User'}
           style={style.inputGroup}
+          keyboardType={'phone-pad'}
           onChangeText={value => handleInput('phone', value)}
         />
       </View>

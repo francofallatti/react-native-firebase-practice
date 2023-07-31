@@ -10,11 +10,23 @@ import UsersListFunction from './screens/UsersListFunction';
 const MainNavigation = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="UsersList" component={UsersList} />
-      <Stack.Screen name="CreateUser" component={CreateUser} />
+      <Stack.Screen
+        name="UsersList"
+        component={UsersList}
+        options={{title: ' Users List'}}
+      />
+      <Stack.Screen
+        name="CreateUser"
+        component={CreateUser}
+        options={{title: ' Create a New User'}}
+      />
       {/* <Stack.Screen name="UsersListFunction" component={UsersListFunction} /> */}
 
-      <Stack.Screen name="UserDetail" component={UserDetail} />
+      <Stack.Screen
+        name="UserDetail"
+        component={UserDetail}
+        options={{title: ' User Detail'}}
+      />
     </Stack.Navigator>
   );
 };
