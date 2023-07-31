@@ -27,7 +27,6 @@ const UsersList = props => {
           });
         });
         setUsersData(users);
-        console.log(usersData);
       });
 
     return () => {

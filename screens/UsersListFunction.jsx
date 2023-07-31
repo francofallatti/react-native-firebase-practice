@@ -14,7 +14,7 @@ const UsersListFunction = props => {
           users.push(doc.data());
         });
         setUsersData(users); // Usamos setUsersData en lugar de setState
-        console.log(users);
+        //console.log(users);
       });
 
     return () => {

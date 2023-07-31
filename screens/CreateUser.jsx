@@ -20,7 +20,7 @@ const CreateUser = props => {
     setUsersData(prevState => ({...prevState, [name]: value}));
   };
   const saveUser = async () => {
-    console.log(usersData);
+    //console.log('user to create: ' + usersData);
     if (usersData.name === '') {
       alert('please provide a name');
     } else if (usersData.email === '') {
@@ -36,7 +36,7 @@ const CreateUser = props => {
         });
         props.navigation.navigate('UsersList');
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     }
   };
